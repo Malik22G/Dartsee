@@ -4,6 +4,8 @@ A comprehensive full-stack web application for visualizing and analyzing dart ga
 
 **Live Demo**: [https://dartsee.vercel.app](https://dartsee.vercel.app)
 
+> **Note**: The backend is hosted on Render's free tier, which spins down after inactivity. The first load may take 30–60 seconds for data to appear after that it works fine.
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white)
