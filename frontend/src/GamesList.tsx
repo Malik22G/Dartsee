@@ -42,7 +42,7 @@ function GamesList() {
 
   const categories = Object.keys(gamesByCategory);
   
-  // Search across ALL categories, not just selected one
+  // Search across ALL categories
   const allGames = categories.flatMap(cat => 
     gamesByCategory[cat].map(game => ({ ...game, category: cat }))
   );

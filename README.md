@@ -294,7 +294,7 @@ SELECT AVG(round_score) AS avg_score
 - Filters to complete rounds only (HAVING COUNT(*) = 3)
 - Discards incomplete rounds
 - Accurate per-round averaging
-
+ 
 ### Miss Detection
 
 **Definition**: A miss occurs when `modifier = 0`
