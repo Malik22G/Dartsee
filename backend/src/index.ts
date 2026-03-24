@@ -16,7 +16,16 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || 'password',
 });
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? [
+        'https://dartsee-api.onrender.com',
+        /\.vercel\.app$/,
+        /\.yourdomain\.com$/
+      ]
+    : '*',
+  credentials: true
+}));
 app.use(express.json());
 
 interface Game {
