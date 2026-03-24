@@ -32,7 +32,7 @@ function Stats() {
   return (
     <div className="container">
       <h2>Game Popularity Statistics</h2>
-      
+
       <div className="stats-container">
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={400}>
@@ -51,8 +51,8 @@ function Stats() {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip 
-                formatter={(value, name, props) => [`${value} games`, props.payload.type]}
+              <Tooltip
+                formatter={(value, _name, props) => [`${value} games`, props.payload.type]}
                 contentStyle={{
                   backgroundColor: 'var(--dark-teal)',
                   border: '1px solid var(--dark-cyan)',
@@ -60,7 +60,7 @@ function Stats() {
                   color: 'var(--wheat)'
                 }}
               />
-              <Legend 
+              <Legend
                 formatter={(value, entry) => `${entry.payload.type}`}
                 wrapperStyle={{ color: 'var(--wheat)' }}
               />
@@ -80,12 +80,12 @@ function Stats() {
               <span className="summary-value">{stats.length}</span>
             </div>
           </div>
-          
+
           <div className="stats-list">
             {stats.map((stat, index) => (
               <div key={stat.type} className="stat-item">
-                <div 
-                  className="stat-color" 
+                <div
+                  className="stat-color"
                   style={{ backgroundColor: COLORS[index % COLORS.length] }}
                 ></div>
                 <span className="stat-type">{stat.type}</span>
