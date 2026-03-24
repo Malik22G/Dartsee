@@ -2,12 +2,14 @@
 
 A comprehensive full-stack web application for visualizing and analyzing dart game data collected by the Dartsee auto-scoring system. Features interactive dartboard visualizations, player statistics, and game analytics.
 
+**Live Demo**: [https://dartsee.vercel.app](https://dartsee.vercel.app)
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat&logo=postgresql&logoColor=white)
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Technology Stack](#technology-stack)
@@ -15,9 +17,8 @@ A comprehensive full-stack web application for visualizing and analyzing dart ga
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
 - [Key Implementation Details](#key-implementation-details)
-- [Screenshots](#screenshots)
 
-## ✨ Features
+## Features
 
 ### Core Features (Required)
 
@@ -183,7 +184,6 @@ dartsee-analytics/
 │   ├── tsconfig.json
 │   └── vite.config.ts
 ├── schema.sql                  # Database schema
-├── data.sql                    # Sample data
 ├── README.md                   # This file
 └── TECHNICAL_REPORT.md         # Detailed technical documentation
 ```
