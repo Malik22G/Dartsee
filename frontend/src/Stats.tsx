@@ -52,7 +52,7 @@ function Stats() {
                 ))}
               </Pie>
               <Tooltip
-                formatter={(value, _name, props) => [`${value} games`, props.payload.type]}
+                formatter={(_value, _name, props) => [`${props.payload?.count} games`, props.payload?.type ?? '']}
                 contentStyle={{
                   backgroundColor: 'var(--dark-teal)',
                   border: '1px solid var(--dark-cyan)',
@@ -61,7 +61,7 @@ function Stats() {
                 }}
               />
               <Legend
-                formatter={(value, entry) => `${entry.payload.type}`}
+                formatter={(_value, entry) => `${(entry.payload as any)?.type ?? ''}`}
                 wrapperStyle={{ color: 'var(--wheat)' }}
               />
             </PieChart>
