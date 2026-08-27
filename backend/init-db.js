@@ -34,8 +34,13 @@ async function initDatabase() {
     `);
 
     // Seed data is optional and is imported once into an empty database.
-    const dataPath = path.join(__dirname, 'data.sql');
-    if (fs.existsSync(dataPath)) {
+    const dataPath = [
+      process.env.SEED_DATA_PATH,
+      path.join(__dirname, 'data.sql'),
+      '/etc/secrets/data.sql'
+    ].find(candidate => candidate && fs.existsSync(candidate));
+
+    if (dataPath) {
       const { rows } = await pool.query(`
         SELECT
           EXISTS (SELECT 1 FROM games) AS has_games,
@@ -67,7 +72,7 @@ async function initDatabase() {
         }
       }
     } else {
-      console.log('No data.sql found; schema is ready with no seed import.');
+      console.log('No seed file found; schema is ready with no seed import.');
     }
     
     await pool.end();
