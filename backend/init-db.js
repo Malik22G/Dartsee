@@ -25,13 +25,47 @@ async function initDatabase() {
     await pool.query(schema);
     console.log('Tables created successfully!');
     
-    // Seed data is optional. Production data can also be imported separately.
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS app_metadata (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Seed data is optional and is imported once into an empty database.
     const dataPath = path.join(__dirname, 'data.sql');
     if (fs.existsSync(dataPath)) {
-      const data = fs.readFileSync(dataPath, 'utf8');
-      console.log('Importing seed data...');
-      await pool.query(data);
-      console.log('Seed data imported successfully!');
+      const { rows } = await pool.query(`
+        SELECT
+          EXISTS (SELECT 1 FROM games) AS has_games,
+          EXISTS (SELECT 1 FROM players) AS has_players,
+          EXISTS (SELECT 1 FROM game_players) AS has_game_players,
+          EXISTS (SELECT 1 FROM throws) AS has_throws,
+          EXISTS (SELECT 1 FROM app_metadata WHERE key = 'seed-data-v1') AS seed_imported
+      `);
+      const state = rows[0];
+
+      if (state.seed_imported) {
+        console.log('Seed data was already imported; skipping.');
+      } else if (state.has_games || state.has_players || state.has_game_players || state.has_throws) {
+        console.log('Database already contains data; skipping seed import.');
+      } else {
+        const data = fs.readFileSync(dataPath, 'utf8');
+        console.log('Importing seed data...');
+        await pool.query('BEGIN');
+        try {
+          await pool.query(data);
+          await pool.query(
+            "INSERT INTO app_metadata (key, value) VALUES ('seed-data-v1', 'complete')"
+          );
+          await pool.query('COMMIT');
+          console.log('Seed data imported successfully!');
+        } catch (error) {
+          await pool.query('ROLLBACK');
+          throw error;
+        }
+      }
     } else {
       console.log('No data.sql found; schema is ready with no seed import.');
     }
