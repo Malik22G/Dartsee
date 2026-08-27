@@ -8,13 +8,15 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001;
 
-const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME || 'darts_analytics',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'password',
-});
+const pool = process.env.DATABASE_URL
+  ? new Pool({ connectionString: process.env.DATABASE_URL })
+  : new Pool({
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME || 'darts_analytics',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD,
+    });
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
@@ -69,6 +71,37 @@ interface GameTypeStats {
   type: string;
   count: number;
 }
+
+// GET /api/health - Verifies both the API and its PostgreSQL data source.
+app.get('/api/health', async (_req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        (SELECT COUNT(*) FROM games) AS games,
+        (SELECT COUNT(*) FROM players) AS players,
+        (SELECT COUNT(*) FROM game_players) AS game_players,
+        (SELECT COUNT(*) FROM throws) AS throws
+    `);
+    const counts = result.rows[0];
+
+    res.json({
+      status: 'ok',
+      database: 'connected',
+      counts: {
+        games: parseInt(counts.games),
+        players: parseInt(counts.players),
+        gamePlayers: parseInt(counts.game_players),
+        throws: parseInt(counts.throws)
+      }
+    });
+  } catch (error) {
+    console.error('Database health check failed:', error);
+    res.status(503).json({
+      status: 'error',
+      database: 'unavailable'
+    });
+  }
+});
 
 // GET /api/games - Returns all games grouped by category
 app.get('/api/games', async (_req, res) => {

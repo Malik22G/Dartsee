@@ -66,4 +66,3 @@ Thumbs.db
 # pnpm-lock.yaml
 DEPLOYMENT_GUIDE.md
 data.sql
-schema.sql
